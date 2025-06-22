@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MacroMate - Fat Loss Calculator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #1f4037, #99f2c8);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00ffc3;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #ddd;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        button {
+            background: linear-gradient(to right, #00ffc3, #00bfa6);
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        button:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 10px #00ffc3, 0 0 20px #00bfa6;
+        }
+        .results {
+            margin-top: 30px;
+            background-color: #1c1c1c;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 6px solid #00ffc3;
+        }
+        .results h3 {
+            margin-top: 0;
+            color: #00ffc3;
+            font-size: 1.6em;
+        }
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        li {
+            margin-bottom: 12px;
+            padding-left: 10px;
+            border-left: 3px solid #00ffc3;
+            line-height: 1.6em;
+        }
+        h4 {
+            color: #00ffc3;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MacroMate</h1>
+        <form method="POST">
+            <label for="weight">Enter your bodyweight (kg):</label>
+            <input type="number" name="weight" step="0.1" required value="{{ request.form.weight or '' }}">
+
+            <label for="goal">Choose your goal:</label>
+            <select name="goal">
+                <option value="cutting" {% if request.form.get('goal') == 'cutting' %}selected{% endif %}>Cutting</option>
+                <option value="bulking" {% if request.form.get('goal') == 'bulking' %}selected{% endif %}>Bulking</option>
+            </select>
+
+            <label for="diet">Diet type:</label>
+            <select name="diet">
+                <option value="veg" {% if request.form.get('diet') == 'veg' %}selected{% endif %}>Vegetarian</option>
+                <option value="nonveg" {% if request.form.get('diet') == 'nonveg' %}selected{% endif %}>Non-Vegetarian</option>
+            </select>
+
+            <button type="submit">Calculate</button>
+        </form>
+
+        {% if result is defined %}
+        <div class="results">
+            <h3>Results</h3>
+            <ul>
+                <li><strong>Maintenance Calories:</strong> {{ result.maintenance }}</li>
+                <li><strong>Target Calories:</strong> {{ result.target }}</li>
+                <li><strong>Protein:</strong> {{ result.protein_g }}g ({{ result.protein_cal }} kcal)</li>
+                <li><strong>Fat:</strong> {{ result.fat_g }}g ({{ result.fat_cal }} kcal)</li>
+                <li><strong>Carbs:</strong> {{ result.carb_g }}g ({{ result.carb_cal }} kcal)</li>
+                <li><strong>Fiber:</strong> {{ result.fiber_g }}g/day</li>
+            </ul>
+            <h4>Recommended Sources</h4>
+            <ul>
+                <li><strong>Protein:</strong> {{ result.sources.protein | join(', ') }}</li>
+                <li><strong>Fat:</strong> {{ result.sources.fat | join(', ') }}</li>
+                <li><strong>Carbs:</strong> {{ result.sources.carbs | join(', ') }}</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
