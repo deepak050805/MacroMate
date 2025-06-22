@@ -13,7 +13,7 @@ fat_sources = {
 }
 carb_sources = {
     "veg": ["Brown Rice", "Oats", "Quinoa", "Sweet Potato", "Banana"],
-    "nonveg": ["Brown Rice", "Oats", "Sweet Potato", "Whole Wheat Bread"]  # Shared
+    "nonveg": ["Brown Rice", "Oats", "Sweet Potato", "Whole Wheat Bread"]
 }
 
 @app.route("/", methods=["GET", "POST"])
@@ -63,6 +63,19 @@ def index():
         })
 
     return render_template("index.html")
+
+# New routes for food source pages
+@app.route("/protein")
+def protein():
+    return render_template("protein.html")
+
+@app.route("/fat")
+def fat():
+    return render_template("fat.html")
+
+@app.route("/carbs")
+def carbs():
+    return render_template("carbs.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
